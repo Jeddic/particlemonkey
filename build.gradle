@@ -1,0 +1,57 @@
+plugins {
+    id 'java'
+
+}
+
+
+apply plugin: 'java'
+apply plugin: 'application'
+
+group 'com.epaga'
+version '1.0'
+
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+    jcenter()
+}
+
+ext {
+    jmonkeyengine_version = '[3.2,)'
+}
+
+if (!hasProperty('mainClass')) {
+    ext.mainClass = 'com.jme3.Main'
+}
+mainClassName = ext.mainClass
+
+task sourcesJar(type: Jar, dependsOn: classes) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+}
+
+task(debug, dependsOn: classes, type: JavaExec) {
+    main = getProperty('mainClass')
+    classpath = sourceSets.main.runtimeClasspath
+    if (project.hasProperty('args')) {
+        args(project.getAt('args').split(','))
+    }
+    standardInput = System.in
+    ignoreExitValue = true
+    debug true
+}
+
+artifacts {
+    archives sourcesJar
+    //	archives javadocJar
+}
+
+dependencies {
+    testCompile group: 'junit', name: 'junit', version: '4.12'
+
+    compile "org.jmonkeyengine:jme3-core:$jmonkeyengine_version"
+    compile "org.jmonkeyengine:jme3-plugins:$jmonkeyengine_version"
+    compile "org.jmonkeyengine:jme3-effects:$jmonkeyengine_version"
+    compile "org.jmonkeyengine:jme3-lwjgl:$jmonkeyengine_version"
+}
