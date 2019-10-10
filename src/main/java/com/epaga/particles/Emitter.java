@@ -74,7 +74,7 @@ import java.util.logging.Logger;
  * A particle emitter is a special kind of node which can be used to simulate a variety of special effects.
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class Emitter extends Node {
 

@@ -53,7 +53,7 @@ import java.util.Iterator;
  * Trail Module
  * Creates particle trails that follow after a particle
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class TrailInfluencer extends ParticleInfluencer {
 

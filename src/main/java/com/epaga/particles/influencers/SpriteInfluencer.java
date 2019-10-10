@@ -47,7 +47,7 @@ import java.io.IOException;
  * Handles sprite animation of a given particle
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class SpriteInfluencer extends ParticleInfluencer {
 	private boolean useRandomImage = false;

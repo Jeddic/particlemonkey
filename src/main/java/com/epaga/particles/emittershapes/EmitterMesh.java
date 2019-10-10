@@ -49,8 +49,10 @@ import java.io.IOException;
 
 /**
  * EmitterMesh
+ * Defines an emitter that emits particles from a mesh
  *
  * @author t0neg0d
+ * @author Jeddic
  */
 public class EmitterMesh extends EmitterShape {
 	private Mesh mesh;

@@ -52,7 +52,7 @@ import java.nio.ShortBuffer;
  * Use a template mesh for each particle instead a quad or a point
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class ParticleDataTemplateMesh extends ParticleDataMesh {
 

@@ -41,7 +41,7 @@ import java.io.IOException;
  * Particle Influencer
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public abstract class ParticleInfluencer implements Savable, Cloneable {
 

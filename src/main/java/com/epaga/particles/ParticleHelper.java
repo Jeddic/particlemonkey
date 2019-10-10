@@ -48,7 +48,7 @@ import com.epaga.particles.valuetypes.VectorValueType;
  *
  * This is a helper class
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class ParticleHelper {
 

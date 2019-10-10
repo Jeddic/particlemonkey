@@ -39,6 +39,12 @@ import com.jme3.scene.Spatial;
 
 import java.io.IOException;
 
+/**
+ * Emitter Shape
+ * This abstract class defines some base attributes that all emitter shapes use.
+ *
+ * @author Jeddic
+ */
 public abstract class EmitterShape implements Savable, Cloneable {
 
   protected float randomDirection = 0.0f;

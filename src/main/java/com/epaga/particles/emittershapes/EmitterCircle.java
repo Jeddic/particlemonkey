@@ -46,6 +46,13 @@ import com.jme3.scene.shape.Cylinder;
 
 import java.io.IOException;
 
+/**
+ * Emitter Circle
+ * Emits particles from a circle shape. Particles are emitted with a default velocity pointed away from the center
+ * of the circle.
+ *
+ * @author Jeddic
+ */
 public class EmitterCircle extends EmitterShape {
 
   private float radius = 1.0f;

@@ -40,7 +40,7 @@ import java.io.IOException;
  * Grad Point
  * This represents a gradient point entry for use in the gradient value type
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class GradPoint implements Savable, Cloneable {
   public ColorRGBA color;

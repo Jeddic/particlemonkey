@@ -54,7 +54,7 @@ import java.util.Iterator;
  * ParticleDataTriMesh
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class ParticleDataTriMesh extends ParticleDataMesh {
 

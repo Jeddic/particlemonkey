@@ -47,7 +47,7 @@ import java.io.IOException;
  * Controls the gravity affecting the particle
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class GravityInfluencer extends ParticleInfluencer {
 	private VectorValueType gravity = new VectorValueType(new Vector3f(0,9.8f,0));

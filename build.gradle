@@ -1,20 +1,70 @@
-plugins {
-    id 'java'
 
+buildscript {
+    repositories {
+        jcenter()
+        mavenCentral()
+    }
+    dependencies {
+        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+    }
 }
 
+plugins {
+    //id 'java'
+    id 'java-library'
+    id "com.jfrog.bintray" version "1.7"
+}
 
-apply plugin: 'java'
-apply plugin: 'application'
+allprojects {
+    repositories {
+        jcenter()
+    }
+    apply plugin: 'maven'
+    apply plugin: 'maven-publish'
+    apply plugin: 'java'
+}
+
+Properties properties = new Properties()
+def propertiesFile = project.rootProject.file('local.properties')
+if (propertiesFile.exists()) {
+    properties.load(propertiesFile.newDataInputStream())
+}
+ext.bintrayUser = properties.getProperty('bin.user')
+ext.bintrayKey = properties.getProperty('bin.key')
 
 group 'com.epaga'
-version '1.0'
+version '1.0.0'
 
 sourceCompatibility = 1.8
 
-repositories {
-    mavenCentral()
-    jcenter()
+publishing {
+    publications {
+        MyPublication(MavenPublication) {
+            from components.java
+            artifact sourcesJar
+            artifact javadocJar
+            groupId 'com.epaga'
+            artifactId 'particlemonkey'
+            version '1.0.0'
+        }
+    }
+}
+
+bintray {
+    user = bintrayUser
+    key = bintrayKey
+    configurations = ['archives']
+    pkg {
+        repo = 'EpagaTools'
+        name = 'particlemonkey'
+        licenses = ['New BSD (3-clause) License']
+        vcsUrl = 'https://github.com/Jeddic/particlemonkey.git'
+        version {
+            name = '1.0.0'
+            desc = 'Particle Monkey jME Emitter'
+            released  = new Date()
+        }
+    }
 }
 
 ext {
@@ -22,14 +72,9 @@ ext {
 }
 
 if (!hasProperty('mainClass')) {
-    ext.mainClass = 'com.jme3.Main'
+    ext.mainClass = 'com.epaga.Main'
 }
-mainClassName = ext.mainClass
-
-task sourcesJar(type: Jar, dependsOn: classes) {
-    classifier = 'sources'
-    from sourceSets.main.allSource
-}
+//mainClassName = ext.mainClass
 
 task(debug, dependsOn: classes, type: JavaExec) {
     main = getProperty('mainClass')
@@ -42,16 +87,27 @@ task(debug, dependsOn: classes, type: JavaExec) {
     debug true
 }
 
-artifacts {
-    archives sourcesJar
-    //	archives javadocJar
-}
-
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
 
     compile "org.jmonkeyengine:jme3-core:$jmonkeyengine_version"
-    compile "org.jmonkeyengine:jme3-plugins:$jmonkeyengine_version"
+    //compile "org.jmonkeyengine:jme3-plugins:$jmonkeyengine_version"
     compile "org.jmonkeyengine:jme3-effects:$jmonkeyengine_version"
     compile "org.jmonkeyengine:jme3-lwjgl:$jmonkeyengine_version"
+}
+
+task sourcesJar(type: Jar) {
+    classifier = 'sources'
+    from sourceSets.main.allSource
+    exclude '**/.backups'
+}
+
+task javadocJar(type: Jar, dependsOn: javadoc) {
+    classifier = 'javadoc'
+    from javadoc.destinationDir
+}
+
+artifacts {
+    archives sourcesJar
+    archives javadocJar
 }

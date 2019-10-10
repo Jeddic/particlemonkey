@@ -40,6 +40,13 @@ import com.jme3.scene.control.Control;
 
 import java.io.IOException;
 
+
+/**
+ * Emitter EmitterControl
+ * This control is used to run the emitter node's update call. This shouldn't be used directly.
+ *
+ * @author Jeddic
+ */
 public class EmitterControl implements Control, Cloneable {
 
   private Emitter emitter;

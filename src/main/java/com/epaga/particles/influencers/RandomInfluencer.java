@@ -45,7 +45,7 @@ import java.io.IOException;
  * Random Module
  * Adds random noise into the particle position. This works really well for things like fire.
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class RandomInfluencer extends ParticleInfluencer {
 

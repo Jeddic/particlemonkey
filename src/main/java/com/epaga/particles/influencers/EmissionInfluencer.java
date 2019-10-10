@@ -47,7 +47,7 @@ import java.util.ArrayList;
  * Allows the emitter to emit particles outside of it's normal workflow. This allows
  * more fine grained control to have spurts of particles instead of a steady emission rate.
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class EmissionInfluencer extends ParticleInfluencer {
 

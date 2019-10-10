@@ -48,7 +48,7 @@ import java.io.IOException;
  * The color module allows you to change the particle's color over time
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class ColorInfluencer extends ParticleInfluencer {
 

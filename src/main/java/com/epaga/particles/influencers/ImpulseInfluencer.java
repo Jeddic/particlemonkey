@@ -48,7 +48,7 @@ import java.io.IOException;
  * Modifies the existing velocity over time by interpolating between it and the linear / orbital values.
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class ImpulseInfluencer extends ParticleInfluencer {
 	private float chance = .2f;

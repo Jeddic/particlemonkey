@@ -42,7 +42,7 @@ import com.jme3.scene.Geometry;
  * BasicPhysicsInfluencer
  * A basic physics influencer which allows particles to bounce off a given geometry
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class BasicPhysicsInfluencer extends ParticleInfluencer {
 

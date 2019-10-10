@@ -47,7 +47,7 @@ import java.io.IOException;
  * Manipulates the velocity of the particle over it's lifetime. These values are multiplied against
  * the initial velocity to create the final value.
  *
- * @author ghoffman
+ * @author Jeddic
  */
 public class VelocityInfluencer extends ParticleInfluencer {
 

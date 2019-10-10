@@ -46,7 +46,7 @@ import java.io.IOException;
  * RotationVelocityInfluencer
  * Handles the rotation of a particle based on the current velocity
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class RotationVelocityInfluencer extends ParticleInfluencer {
 

@@ -48,7 +48,7 @@ import java.io.IOException;
  * This influencer attempts to move a particle towards a given destination
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class PreferredDestinationInfluencer extends ParticleInfluencer {
 

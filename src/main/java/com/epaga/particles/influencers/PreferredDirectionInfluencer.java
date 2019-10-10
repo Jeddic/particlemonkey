@@ -47,7 +47,7 @@ import java.io.IOException;
  * Attempts to change the particles direction over time
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class PreferredDirectionInfluencer extends ParticleInfluencer {
 

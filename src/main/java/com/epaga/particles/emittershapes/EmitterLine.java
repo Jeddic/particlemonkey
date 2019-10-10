@@ -45,6 +45,12 @@ import com.jme3.scene.shape.Line;
 
 import java.io.IOException;
 
+/**
+ * Emitter Line
+ * Emits particles from a line
+ *
+ * @author Jeddic
+ */
 public class EmitterLine extends EmitterShape {
 
   private float radius = 1.0f;

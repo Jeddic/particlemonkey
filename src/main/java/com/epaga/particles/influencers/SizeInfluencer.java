@@ -45,7 +45,7 @@ import java.io.IOException;
  * The size module controls the particle size over time
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class SizeInfluencer extends ParticleInfluencer {
 

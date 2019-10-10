@@ -46,6 +46,12 @@ import com.jme3.scene.shape.Sphere;
 
 import java.io.IOException;
 
+/**
+ * Emitter Sphere
+ * Emits particles from a sphere shape
+ *
+ * @author Jeddic
+ */
 public class EmitterSphere extends EmitterShape {
 
   private float radius = 1.0f;

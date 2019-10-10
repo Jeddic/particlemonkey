@@ -46,6 +46,12 @@ import com.jme3.scene.shape.Cylinder;
 
 import java.io.IOException;
 
+/**
+ * Emitter Cone
+ * Emits particles from a cone shape
+ *
+ * @author Jeddic
+ */
 public class EmitterCone extends EmitterShape {
 
   private float angle = FastMath.PI / 4.0f;

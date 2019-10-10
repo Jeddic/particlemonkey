@@ -39,7 +39,7 @@ import java.io.IOException;
 /**
  * Emission
  * Defines a special emission type for the emitter that works outside of normal particle emissions
- * @author Jedic
+ * @author Jeddic
  */
 public class Emission implements Cloneable, Savable {
 

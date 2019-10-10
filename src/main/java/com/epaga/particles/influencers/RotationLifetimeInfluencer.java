@@ -46,7 +46,7 @@ import java.io.IOException;
  * Handles the rotation over the lifetime of a particle
  *
  * @author t0neg0d
- * @author Jedic
+ * @author Jeddic
  */
 public class RotationLifetimeInfluencer extends ParticleInfluencer {
 

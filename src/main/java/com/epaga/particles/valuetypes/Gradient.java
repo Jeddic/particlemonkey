@@ -41,7 +41,7 @@ import java.util.ArrayList;
  * Gradient
  * This represents a gradient which can be used with the particle system
  *
- * @author Jedic
+ * @author Jeddic
  */
 public class Gradient implements Savable, Cloneable {
 

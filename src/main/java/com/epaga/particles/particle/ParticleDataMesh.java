@@ -37,8 +37,10 @@ import com.jme3.renderer.Camera;
 import com.jme3.scene.Mesh;
 
 /**
+ * ParticleDataMesh
  *
  * @author t0neg0d
+ * @author Jeddic
  */
 public abstract class ParticleDataMesh extends Mesh {
 	
