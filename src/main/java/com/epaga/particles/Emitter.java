@@ -285,7 +285,7 @@ public class Emitter extends Node {
    * Particles are created as staticly placed, with no velocity. Particles set
    * to static with remain in place and follow the particles shape's animations.
    *
-   * @param useStaticParticles
+   * @param useStaticParticles true if these particles are static
    */
   public void setUseStaticParticles(boolean useStaticParticles) {
     this.useStaticParticles = useStaticParticles;
@@ -438,6 +438,23 @@ public class Emitter extends Node {
 
   public final void addInfluencer(ParticleInfluencer influencer, boolean reload) {
     influencerMap.put(influencer.getClass().getName(), influencer);
+
+    if (reload) {
+      initParticles(datameshType, templateMesh);
+    }
+  }
+
+  /**
+   * Removes an influencer from this emitter and cleans up the particle system
+   *
+   * @param influencer The particle influencer to remove
+   */
+  public final void removeInfluencer(Class<? extends ParticleInfluencer> influencer) {
+    removeInfluencer(influencer, true);
+  }
+
+  public final void removeInfluencer(Class<? extends ParticleInfluencer> influencer, boolean reload) {
+    influencerMap.remove(influencer.getName());
 
     if (reload) {
       initParticles(datameshType, templateMesh);

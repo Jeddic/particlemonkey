@@ -6,6 +6,7 @@ buildscript {
     }
     dependencies {
         classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
+        classpath "gradle.plugin.org.mikeneck:graalvm-native-image-plugin:0.1.1"
     }
 }
 
@@ -13,7 +14,9 @@ plugins {
     //id 'java'
     id 'java-library'
     id "com.jfrog.bintray" version "1.7"
+    id "org.mikeneck.graalvm-native-image" version "0.1.1"
 }
+
 
 allprojects {
     repositories {
@@ -22,6 +25,19 @@ allprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'java'
+    apply plugin: "org.mikeneck.graalvm-native-image"
+}
+
+nativeImage {
+  graalVmHome = System.getProperty('java.home')
+  mainClass = 'com.epaga.Main'
+  executableName = 'my-native-application'
+  arguments(
+      '--no-fallback',
+      '--enable-all-security-services',
+      '--initialize-at-run-time=com.example.runtime',
+      '--report-unsupported-elements-at-runtime'
+  )
 }
 
 Properties properties = new Properties()
@@ -32,8 +48,14 @@ if (propertiesFile.exists()) {
 ext.bintrayUser = properties.getProperty('bin.user')
 ext.bintrayKey = properties.getProperty('bin.key')
 
-group 'com.epaga'
-version '1.0.0'
+group = 'com.epaga'
+
+
+ext {
+    jmonkeyengine_version = '[3.2,)'
+}
+
+version = '1.0.1'
 
 sourceCompatibility = 1.8
 
@@ -45,7 +67,7 @@ publishing {
             artifact javadocJar
             groupId 'com.epaga'
             artifactId 'particlemonkey'
-            version '1.0.0'
+            version "${version}"
         }
     }
 }
@@ -60,16 +82,13 @@ bintray {
         licenses = ['New BSD (3-clause) License']
         vcsUrl = 'https://github.com/Jeddic/particlemonkey.git'
         version {
-            name = '1.0.0'
+            name = "${project.version}"
             desc = 'Particle Monkey jME Emitter'
             released  = new Date()
         }
     }
 }
 
-ext {
-    jmonkeyengine_version = '[3.2,)'
-}
 
 if (!hasProperty('mainClass')) {
     ext.mainClass = 'com.epaga.Main'

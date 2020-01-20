@@ -48,7 +48,7 @@ import java.io.IOException;
 public abstract class EmitterShape implements Savable, Cloneable {
 
   protected float randomDirection = 0.0f;
-  protected float orginDirection = 0.0f;
+  protected float originDirection = 0.0f;
   protected float randomizePosition = 0.0f;
 
 
@@ -75,14 +75,14 @@ public abstract class EmitterShape implements Savable, Cloneable {
     if (randomDirection > 1.0f) randomDirection = 1.0f;
   }
 
-  public float getOrginDirection() {
-    return orginDirection;
+  public float getOriginDirection() {
+    return originDirection;
   }
 
-  public void setOrginDirection(float orginDirection) {
-    this.orginDirection = orginDirection;
-    if (orginDirection < 0) orginDirection = 0.0f;
-    if (orginDirection > 1.0f) orginDirection = 1.0f;
+  public void setOriginDirection(float originDirection) {
+    this.originDirection = originDirection;
+    if (originDirection < 0) originDirection = 0.0f;
+    if (originDirection > 1.0f) originDirection = 1.0f;
   }
 
   public float getRandomizePosition() {
@@ -109,13 +109,13 @@ public abstract class EmitterShape implements Savable, Cloneable {
       nextDirection.z = nextDirection.z * (1.0f - randomDirection) + randomDirection * tempVec.z;
     }
 
-    if (orginDirection > 0) {
+    if (originDirection > 0) {
       tempVec.set(nextPosition);
       tempVec.normalizeLocal();
 
-      nextDirection.x = nextDirection.x * (1.0f - orginDirection) + orginDirection * tempVec.x;
-      nextDirection.y = nextDirection.y * (1.0f - orginDirection) + orginDirection * tempVec.y;
-      nextDirection.z = nextDirection.z * (1.0f - orginDirection) + orginDirection * tempVec.z;
+      nextDirection.x = nextDirection.x * (1.0f - originDirection) + originDirection * tempVec.x;
+      nextDirection.y = nextDirection.y * (1.0f - originDirection) + originDirection * tempVec.y;
+      nextDirection.z = nextDirection.z * (1.0f - originDirection) + originDirection * tempVec.z;
     }
   }
 
@@ -124,7 +124,7 @@ public abstract class EmitterShape implements Savable, Cloneable {
   public void write(JmeExporter ex) throws IOException {
     OutputCapsule oc = ex.getCapsule(this);
     oc.write(randomDirection, "randomdirection", 0.0f);
-    oc.write(orginDirection, "orgindirection", 0.0f);
+    oc.write(originDirection, "orgindirection", 0.0f);
     oc.write(randomizePosition, "randomizeposition", 0.0f);
   }
 
@@ -132,7 +132,7 @@ public abstract class EmitterShape implements Savable, Cloneable {
   public void read(JmeImporter im) throws IOException {
     InputCapsule ic = im.getCapsule(this);
     randomDirection = ic.readFloat("randomdirection", 0.0f);
-    orginDirection = ic.readFloat("orgindirection", 0.0f);
+    originDirection = ic.readFloat("orgindirection", 0.0f);
     randomizePosition = ic.readFloat("randomizeposition", 0.0f);
 
   }
@@ -153,7 +153,7 @@ public abstract class EmitterShape implements Savable, Cloneable {
     EmitterShape check = (EmitterShape)o;
 
     if (randomDirection != check.randomDirection) return false;
-    if (orginDirection != check.orginDirection) return false;
+    if (originDirection != check.originDirection) return false;
     if (randomizePosition != check.randomizePosition) return false;
 
 
