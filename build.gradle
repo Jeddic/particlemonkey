@@ -108,12 +108,12 @@ task(debug, dependsOn: classes, type: JavaExec) {
 }
 
 dependencies {
-    testCompile group: 'junit', name: 'junit', version: '4.12'
+    testImplementation group: 'junit', name: 'junit', version: '4.12'
 
-    compile "org.jmonkeyengine:jme3-core:$jmonkeyengine_version"
-    //compile "org.jmonkeyengine:jme3-plugins:$jmonkeyengine_version"
-    compile "org.jmonkeyengine:jme3-effects:$jmonkeyengine_version"
-    compile "org.jmonkeyengine:jme3-lwjgl:$jmonkeyengine_version"
+    implementation "org.jmonkeyengine:jme3-core:$jmonkeyengine_version"
+    //implementation "org.jmonkeyengine:jme3-plugins:$jmonkeyengine_version"
+    implementation "org.jmonkeyengine:jme3-effects:$jmonkeyengine_version"
+    implementation "org.jmonkeyengine:jme3-lwjgl:$jmonkeyengine_version"
 }
 
 task sourcesJar(type: Jar) {
