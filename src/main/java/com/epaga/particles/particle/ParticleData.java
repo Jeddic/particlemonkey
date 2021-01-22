@@ -161,6 +161,7 @@ public class ParticleData {
   }
 
   public void update(float tpf) {
+
     if (!emitter.getUseStaticParticles()) {
       life -= tpf;
       if (life <= 0) {
@@ -243,6 +244,7 @@ public class ParticleData {
     active = false;
     position.zero();
     velocity.zero();
+    //size = 0.0f;
     trailSegments.clear();
     if (emitter.getActiveParticleCount() > 0) {
       emitter.decActiveParticleCount();
