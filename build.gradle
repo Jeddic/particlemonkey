@@ -15,7 +15,6 @@ plugins {
     id 'java-library'
     id 'maven'
     id "com.jfrog.bintray" version "1.7"
-    id "org.mikeneck.graalvm-native-image" version "0.1.1"
 }
 
 
@@ -26,19 +25,6 @@ allprojects {
     apply plugin: 'maven'
     apply plugin: 'maven-publish'
     apply plugin: 'java'
-    apply plugin: "org.mikeneck.graalvm-native-image"
-}
-
-nativeImage {
-  graalVmHome = System.getProperty('java.home')
-  mainClass = 'com.epaga.Main'
-  executableName = 'my-native-application'
-  arguments(
-      '--no-fallback',
-      '--enable-all-security-services',
-      '--initialize-at-run-time=com.example.runtime',
-      '--report-unsupported-elements-at-runtime'
-  )
 }
 
 Properties properties = new Properties()
