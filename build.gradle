@@ -3,16 +3,10 @@ buildscript {
         jcenter()
         mavenCentral()
     }
-    dependencies {
-        classpath 'com.jfrog.bintray.gradle:gradle-bintray-plugin:1.+'
-    }
 }
 
 plugins {
-    //id 'java'
     id 'java-library'
-    id 'maven'
-    id "com.jfrog.bintray" version "1.7"
 }
 
 
@@ -20,82 +14,24 @@ allprojects {
     repositories {
         jcenter()
     }
-    apply plugin: 'maven'
-    apply plugin: 'maven-publish'
     apply plugin: 'java'
 }
 
-Properties properties = new Properties()
-def propertiesFile = project.rootProject.file('local.properties')
-if (propertiesFile.exists()) {
-    properties.load(propertiesFile.newDataInputStream())
-}
-ext.bintrayUser = properties.getProperty('bin.user')
-ext.bintrayKey = properties.getProperty('bin.key')
-
 group = 'com.epaga'
-
 
 ext {
     jmonkeyengine_version = '[3.2,)'
 }
 
-version = '1.0.2'
+version = '1.0.3'
 
 sourceCompatibility = 1.8
-
-publishing {
-    publications {
-        MyPublication(MavenPublication) {
-            from components.java
-            //artifact sourcesJar
-            //artifact javadocJar
-            groupId 'com.epaga'
-            artifactId 'particlemonkey'
-            version "${version}"
-        }
-    }
-}
-
-bintray {
-    user = bintrayUser
-    key = bintrayKey
-    configurations = ['archives']
-    pkg {
-        repo = 'EpagaTools'
-        name = 'particlemonkey'
-        licenses = ['New BSD (3-clause) License']
-        vcsUrl = 'https://github.com/Jeddic/particlemonkey.git'
-        version {
-            name = "${project.version}"
-            desc = 'Particle Monkey jME Emitter'
-            released  = new Date()
-        }
-    }
-}
-
-
-if (!hasProperty('mainClass')) {
-    ext.mainClass = 'com.epaga.Main'
-}
-
-task(debug, dependsOn: classes, type: JavaExec) {
-    main = getProperty('mainClass')
-    classpath = sourceSets.main.runtimeClasspath
-    if (project.hasProperty('args')) {
-        args(project.getAt('args').split(','))
-    }
-    standardInput = System.in
-    ignoreExitValue = true
-    debug true
-}
 
 dependencies {
     testImplementation group: 'junit', name: 'junit', version: '4.12'
 
     implementation "org.jmonkeyengine:jme3-core:$jmonkeyengine_version"
     implementation "org.jmonkeyengine:jme3-effects:$jmonkeyengine_version"
-    implementation "org.jmonkeyengine:jme3-lwjgl:$jmonkeyengine_version"
 }
 
 task sourcesJar(type: Jar) {
