@@ -31,6 +31,8 @@
  */
 package com.epaga.particles.valuetypes;
 
+import com.epaga.particles.valuetypes.curvebuilder.CurveBuilderAtAnchor;
+import com.epaga.particles.valuetypes.curvebuilder.CurveBuilderStart;
 import com.jme3.export.*;
 import com.jme3.math.Vector2f;
 
@@ -157,5 +159,39 @@ public class Curve implements Savable, Cloneable {
     }
 
     return true;
+  }
+
+
+  /**
+   * Produces a builder that can be used to fluently build a curve. A Curve will always be continuous (And should
+   * move in a positive X direction) but the gradient may change sharply.
+   *
+   * It is a series of anchor points connected either by straight line sections or cubic Bézier-like curves (defined by
+   * 2 control points). They are bezier-like curves not Bézier curves because of the requirement that X (often
+   * representing time) can only be allowed to move forward
+   *
+   * In normal usage the first anchor point should be at x = 0, all further points should advance in the X axis and
+   * the final anchor point should have x at 1. This is because usually X is the fractional life of the particle
+   *
+   * Example usage:
+   *
+   * <pre>{@code
+   *     Curve curve = Curve.builder()
+   *             .anchorPoint(new Vector2f(0,0))
+   *             .anchorPoint(new Vector2f(0.5f,0.5f))
+   *             .controlPoint1(new Vector2f(0.6f,0.5f))
+   *             .controlPoint2(new Vector2f(0.8f,2f))
+   *             .anchorPoint(new Vector2f(1,2f))
+   *             .build();
+   * }</pre>
+   *
+   * This example produces a straight line from (0,0) to (0.5,0.5), then a cubic Besier curves between (0.5,0.5) to (1,2) with control points (0.6,0.5) and (0.8,2)
+   *
+   * Note that a builder should not be reused.
+   *
+   * @return a CurveBuilderStart
+   */
+  public static CurveBuilderStart builder(){
+    return new CurveBuilderStart();
   }
 }

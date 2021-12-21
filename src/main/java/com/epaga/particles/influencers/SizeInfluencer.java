@@ -44,6 +44,13 @@ import java.io.IOException;
  * Size Module
  * The size module controls the particle size over time
  *
+ * To create a size inflencer that linearly changes the particle size from 0.3 to 0.1 over its lifetime create like:
+ * <pre>{@code
+ *         ValueType sizeOverTime = new ValueType(Curve.builder().anchorPoint(0f, 0.03f).anchorPoint(1f, 0.01f).end());
+ *         SizeInfluencer sizeInfluencer = new SizeInfluencer();
+ *         sizeInfluencer.setSizeOverTime(sizeOverTime);
+ * }</pre>
+ *
  * @author t0neg0d
  * @author Jeddic
  */
