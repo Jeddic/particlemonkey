@@ -38,6 +38,10 @@ import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
+/**
+ * The curve represents a continous function that parses through a number of control
+ * points. See {@link Curve#addControlPoint} for details on how these control points work
+ */
 public class Curve implements Savable, Cloneable {
 
   private LinkedList<ControlPoint> points = new LinkedList<>();
@@ -45,6 +49,38 @@ public class Curve implements Savable, Cloneable {
   public Curve() {
   }
 
+  /**
+   * Adds a control point to the curve. The line will enter the control point with the following
+   * rules but may curve between control points so a continuous line is formed.
+   *
+   * Note that if the implied gradient entering the control point is different from the implied gradient exiting it then
+   * the gradient may sharply change (but the line itself will remain continuous).
+   *
+   * Between each pair of control points acts as an independent cubic Bézier-like curve defined by the following:
+   *
+   * anchor 1 - the 'point' of the first control point (the line will pass through this point)
+   * intermediate point 1 - the 'out' of the first control point (the line may not go through this point but it controls the initial direction the line exits anchor 1)
+   * intermediate point 2 - the 'in' of the second control point (the line may not go through this point but it controls the initial direction the line enters anchor 2)
+   * anchor 2 - the 'point' of the second control point (the line will pass through this point)
+   *
+   * Instinctively you can think of each section "trying" to go from anchor 1 to intermediate point 1 to intermediate point 2 to anchor 2
+   * but being smoothed using a quadratic curve such that it may not actually touch the intermediate points.
+   *
+   * Note; if this is the first control point the in doesn't matter and if its the last control point the out doesn't matter
+   * 
+   * Note; these are Bézier-like curve but not Bézier curves due to the requirement that X must always move forwards
+   * (as it often represents time)
+   *
+   * @param in
+   *          the intermediate point immediately before this anchor point.
+   *          This is a control point in Bézier curve terminology
+   * @param point
+   *          the line will pass through this point. This is an anchor point in Bézier curve terminology
+   * @param out
+   *          the intermediate point immediately after this anchor point.
+   *          This is a control point in Bézier curve terminology
+   * @return this curve
+   */
   public Curve addControlPoint(Vector2f in, Vector2f point, Vector2f out) {
     points.add(new ControlPoint(in, point, out));
     sort();
@@ -83,12 +119,15 @@ public class Curve implements Savable, Cloneable {
 
           // get the midpoints of the 3 line segments
           //float p1x = lastPoint.point.x - ((lastPoint.point.x - lastPoint.outControlPoint.x) * perc);
+          //what y should be according to the the line from lastPoint.point to lastPoint.outControlPoint
           float p1y = lastPoint.point.y - ((lastPoint.point.y - lastPoint.outControlPoint.y) * perc);
 
           //float p2x = lastPoint.outControlPoint.x - ((lastPoint.outControlPoint.x - currentPoint.inControlPoint.x) * perc);
+          //what y should be according to the the line from lastPoint.outControlPoint to currentPoint.inControlPoint
           float p2y = lastPoint.outControlPoint.y - ((lastPoint.outControlPoint.y - currentPoint.inControlPoint.y) * perc);
 
           //float p3x = currentPoint.inControlPoint.x - ((currentPoint.inControlPoint.x - currentPoint.point.x) * perc);
+          //what y should be according to the the line from lastPoint.outControlPoint to currentPoint.inControlPoint
           float p3y = currentPoint.inControlPoint.y - ((currentPoint.inControlPoint.y - currentPoint.point.y) * perc);
 
           // now get the midpoints of the two segments
