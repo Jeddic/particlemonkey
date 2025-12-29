@@ -114,6 +114,7 @@ public class Emitter extends Node {
   // Emitter info
   private int nextIndex = 0;
   private float targetInterval = .00015f, currentInterval = 0;
+  private float delay = 0;
   private int particlesPerEmission;
   private float emissionsPerSecond;
   private boolean useStaticParticles = false;
@@ -133,6 +134,7 @@ public class Emitter extends Node {
 
   // used to keep track of the current systems life
   private float currentDuration = 0.0f;
+  private float currentDelay = 0;
 
   // Used to control the emitter node
 
@@ -534,6 +536,10 @@ public class Emitter extends Node {
     this.duration = duration;
   }
 
+  public float getDelay() { return delay; }
+
+  public void setDelay(float delay) { this.delay = delay; }
+
   public boolean isLooping() {
     return looping;
   }
@@ -660,10 +666,19 @@ public class Emitter extends Node {
   public void updateEmitter(float tpf) {
     //long t = System.currentTimeMillis();
     if (enabled) {
+      // Lets delay the start of the emitter
+      if (delay > 0 && currentDelay < delay) {
+        currentDelay += tpf;
+        return;
+      }
+
       currentDuration += tpf;
 
       if (currentDuration > duration && looping) {
         currentDuration -= duration;
+
+        // reset the delay as well
+        currentDelay = 0;
       }
 
       //if (delay <= 0.0f ) {
@@ -833,6 +848,7 @@ public class Emitter extends Node {
     oc.write(lifeMin, "lifeMin", null);
     oc.write(lifeMax, "lifeMax", null);
     oc.write(duration, "duration", 5.0f);
+    oc.write(delay, "delay", 0.0f);
     oc.write(looping, "looping", true);
     oc.write(preCalculate, "preCalculate", false);
     oc.write(enabled, "enabled", false);
@@ -866,6 +882,7 @@ public class Emitter extends Node {
     lifeMin = (ValueType) ic.readSavable("lifeMin", new ValueType(0.5f));
     lifeMax = (ValueType) ic.readSavable("lifeMax", new ValueType(1.0f));
     duration = ic.readFloat("duration", 5.0f);
+    delay = ic.readFloat("delay", 0.0f);
     looping = ic.readBoolean("looping", true);
     preCalculate = ic.readBoolean("preCalculate", false);
     enabled = ic.readBoolean("enabled", false);
