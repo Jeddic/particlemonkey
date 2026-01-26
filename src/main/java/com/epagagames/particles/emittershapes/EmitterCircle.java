@@ -59,8 +59,8 @@ public class EmitterCircle extends EmitterShape {
   private float arc = FastMath.PI * 2.0f;
   private float radiusThickness = 1.0f;
 
-  private transient Vector3f nextDirection = new Vector3f();
-  private transient Vector3f nextPosition = new Vector3f();
+//  private transient Vector3f nextDirection = new Vector3f();
+//  private transient Vector3f nextPosition = new Vector3f();
   private transient Quaternion temp = new Quaternion();
 
   public EmitterCircle() {

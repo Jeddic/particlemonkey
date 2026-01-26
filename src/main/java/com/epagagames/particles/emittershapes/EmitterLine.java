@@ -55,9 +55,6 @@ public class EmitterLine extends EmitterShape {
 
   private float radius = 1.0f;
 
-  private transient Vector3f nextDirection = new Vector3f();
-  private transient Vector3f nextPosition = new Vector3f();
-
   public EmitterLine() {
 
   }
