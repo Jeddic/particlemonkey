@@ -43,6 +43,7 @@ import com.jme3.export.JmeImporter;
 import com.jme3.export.OutputCapsule;
 import com.jme3.material.Material;
 import com.jme3.math.ColorRGBA;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.scene.Geometry;
 
@@ -67,6 +68,9 @@ public class TrailInfluencer extends ParticleInfluencer {
 
   // How often do we output a polygon for the trail?
   private float minLength = 0.1f;
+
+  // UV scale
+  private Vector2f uvScale = new Vector2f(1.0f, 1.0f);
 
   // Needs to be between 0 - 1.0
   // Basically tells the system how long a trail segment lasts compared to the particle lifetime
@@ -121,6 +125,10 @@ public class TrailInfluencer extends ParticleInfluencer {
   public void setMinLength(float minLength) {
     this.minLength = minLength;
   }
+
+  public Vector2f getUvScale() { return uvScale; }
+
+  public void setUvScale(Vector2f uvScale) { this.uvScale = uvScale; }
 
   public float getTrailLife() {
     return trailLife;
@@ -186,6 +194,8 @@ public class TrailInfluencer extends ParticleInfluencer {
       trailPoint.life -= tpf;
       if (trailPoint.life <= 0) {
         itr.remove();
+        // we need to set this to handle UV's correctly
+        p.removedTrailCount++;
       }
 
       float life = p.startlife * trailLife - trailPoint.life;
@@ -257,6 +267,7 @@ public class TrailInfluencer extends ParticleInfluencer {
     OutputCapsule oc = ex.getCapsule(this);
     oc.write(trailmat, "trailmat", null);
     oc.write(minLength, "minlength", 0.1f);
+    oc.write(uvScale, "uvscale", new Vector2f(1.0f, 1.0f));
     oc.write(trailLife, "traillife", 1.0f);
     oc.write(useParticleSize, "useparticlesize", false);
     oc.write(useParticleColor, "useparticlecolor", false);
@@ -270,6 +281,7 @@ public class TrailInfluencer extends ParticleInfluencer {
     InputCapsule ic = im.getCapsule(this);
     trailmat = (Material)ic.readSavable("trailmat", null);
     minLength = ic.readFloat("minlength", 0.1f);
+    uvScale = (Vector2f)ic.readSavable("uvscale", new Vector2f(1.0f, 1.0f));
     trailLife = ic.readFloat("traillife", 1.0f);
     useParticleSize = ic.readBoolean("useparticlesize", false);
     useParticleColor = ic.readBoolean("useparticlecolor", false);

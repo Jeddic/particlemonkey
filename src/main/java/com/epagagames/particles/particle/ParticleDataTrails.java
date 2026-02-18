@@ -32,8 +32,10 @@
 package com.epagagames.particles.particle;
 
 import com.epagagames.particles.Emitter;
+import com.epagagames.particles.influencers.TrailInfluencer;
 import com.jme3.math.Matrix3f;
 import com.jme3.math.Quaternion;
+import com.jme3.math.Vector2f;
 import com.jme3.math.Vector3f;
 import com.jme3.renderer.Camera;
 import com.jme3.scene.Mesh;
@@ -163,6 +165,10 @@ public class ParticleDataTrails extends ParticleDataMesh {
     // update data in vertex buffers
     positions.clear();
     colors.clear();
+    texcoords.clear();
+
+    TrailInfluencer trailInfluencer = emitter.getInfluencer(TrailInfluencer.class);
+    Vector2f uvScale = trailInfluencer.getUvScale();
 
     // zero out all position data
     for (int i = 0; i < particles.length; i++) {
@@ -175,6 +181,16 @@ public class ParticleDataTrails extends ParticleDataMesh {
         positions.put(0.0f).put(0.0f).put(0.0f);
         positions.put(0.0f).put(0.0f).put(0.0f);
 
+//        texcoords.position(8 * (segmentsPerParticle * i + j));
+//        texcoords.put(0.0f).put(0.0f);
+//        texcoords.put(0.0f).put(0.0f);
+//        texcoords.put(0.0f).put(0.0f);
+//        texcoords.put(0.0f).put(0.0f);
+//          texcoords.position(8 * (segmentsPerParticle * i + j));
+//          texcoords.put(0f).put(uvScale.y);
+//          texcoords.put(uvScale.x).put(uvScale.y);
+//          texcoords.put(0f).put(0f);
+//          texcoords.put(uvScale.x).put(0f);
       }
     }
 
@@ -182,6 +198,7 @@ public class ParticleDataTrails extends ParticleDataMesh {
     // if no trail data - set new trail point.. draw one segment from that point to us
     // if one point - check if distance is far enough for another segment.... add one if it is... draw segments + last one to us
     int index = 0;
+    int uvIndex = 0;
     for (int i = 0; i < particles.length; i++) {
       ParticleData p = particles[i];
       if (p.life <= 0) {
@@ -197,7 +214,7 @@ public class ParticleDataTrails extends ParticleDataMesh {
       // render all segments
       ParticleTrailPoint last = null;
       ParticleTrailPoint current = p.trailSegments.size() > 0 ? p.trailSegments.getFirst() : null;
-      for (int j = 1; j < p.trailSegments.size(); j++, index += 12) {
+      for (int j = 1; j < p.trailSegments.size(); j++, index += 12, uvIndex += 8) {
         last = current;
         current = p.trailSegments.get(j);
 
@@ -206,6 +223,15 @@ public class ParticleDataTrails extends ParticleDataMesh {
         dir.set(cam.getDirection());
         drawQuad(index, positions, p, last, current);
 
+        // The trails are connected in the Y axis, so we need to use the removed trail count in order
+        // to have consistent UV's. The X axis can just use the scale directly
+        texcoords.position(uvIndex);
+        float scale = uvScale.y;
+        float offset = (p.removedTrailCount + j - 1.0f) * scale;
+          texcoords.put(0.0f).put(offset);
+          texcoords.put(uvScale.x).put(offset);
+        texcoords.put(0.0f).put(offset + scale);
+        texcoords.put(uvScale.x).put(offset + scale);
 
         int abgr = last.color.asIntABGR();
         colors.putInt(abgr);
@@ -234,6 +260,7 @@ public class ParticleDataTrails extends ParticleDataMesh {
 
     pvb.updateData(positions);
     cvb.updateData(colors);
+    tvb.updateData(texcoords);
     updateBound();
 
   }

@@ -135,6 +135,11 @@ public class ParticleData {
   public LinkedList<ParticleTrailPoint> trailSegments = new LinkedList<>();
 
   /**
+   * We need this to properly handle UV's for trails
+   */
+  public int removedTrailCount = 0;
+
+  /**
    * A strage facility for per-particle data used by influencers
    */
   Map<String, Object> data = new HashMap();
@@ -190,6 +195,7 @@ public class ParticleData {
     size = startSize;
     randomValue = FastMath.nextRandomFloat();
     trailSegments.clear();
+    removedTrailCount = 0;
     //startlife = (emitter.getLifeMax() - emitter.getLifeMin()) * FastMath.nextRandomFloat() + emitter.getLifeMin();
     float minLife = lifeMin.getValue(blendAmount, randomValue);
     startlife = (lifeMax.getValue(blendAmount, randomValue) - minLife) * FastMath.nextRandomFloat() + minLife;
@@ -247,6 +253,7 @@ public class ParticleData {
     color.set(0,0,0,0);
     //size = 0.0f;
     trailSegments.clear();
+    removedTrailCount = 0;
     if (emitter.getActiveParticleCount() > 0) {
       emitter.decActiveParticleCount();
     }
