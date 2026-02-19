@@ -50,13 +50,9 @@ public class ParticleDataTrails extends ParticleDataMesh {
 
   private Emitter emitter;
   private int segmentsPerParticle = 100;
-  private Vector3f tempOne = new Vector3f();
   private Vector3f left = new Vector3f();
-  private Vector3f up = new Vector3f();
   private Vector3f dir = new Vector3f();
   private Vector3f tempV3 = new Vector3f();
-  private Quaternion rotStore = new Quaternion();
-  private Quaternion tempQ = new Quaternion();
 
   @Override
   public void extractTemplateFromMesh(Mesh mesh) {
@@ -180,17 +176,6 @@ public class ParticleDataTrails extends ParticleDataMesh {
         positions.put(0.0f).put(0.0f).put(0.0f);
         positions.put(0.0f).put(0.0f).put(0.0f);
         positions.put(0.0f).put(0.0f).put(0.0f);
-
-//        texcoords.position(8 * (segmentsPerParticle * i + j));
-//        texcoords.put(0.0f).put(0.0f);
-//        texcoords.put(0.0f).put(0.0f);
-//        texcoords.put(0.0f).put(0.0f);
-//        texcoords.put(0.0f).put(0.0f);
-//          texcoords.position(8 * (segmentsPerParticle * i + j));
-//          texcoords.put(0f).put(uvScale.y);
-//          texcoords.put(uvScale.x).put(uvScale.y);
-//          texcoords.put(0f).put(0f);
-//          texcoords.put(uvScale.x).put(0f);
       }
     }
 
@@ -218,8 +203,7 @@ public class ParticleDataTrails extends ParticleDataMesh {
         last = current;
         current = p.trailSegments.get(j);
 
-        up.set(cam.getUp());
-        left.set(cam.getLeft());
+        // set the camera direction to draw the quad
         dir.set(cam.getDirection());
         drawQuad(index, positions, p, last, current);
 
@@ -228,8 +212,8 @@ public class ParticleDataTrails extends ParticleDataMesh {
         texcoords.position(uvIndex);
         float scale = uvScale.y;
         float offset = (p.removedTrailCount + j - 1.0f) * scale;
-          texcoords.put(0.0f).put(offset);
-          texcoords.put(uvScale.x).put(offset);
+        texcoords.put(0.0f).put(offset);
+        texcoords.put(uvScale.x).put(offset);
         texcoords.put(0.0f).put(offset + scale);
         texcoords.put(uvScale.x).put(offset + scale);
 
@@ -266,20 +250,11 @@ public class ParticleDataTrails extends ParticleDataMesh {
   }
 
   private void drawQuad(int index, FloatBuffer positions, ParticleData p, ParticleTrailPoint last, ParticleTrailPoint current) {
-    Vector3f test = left.clone();
-
     positions.position(index);
-    tempV3.set(last.position);
-//    if (emitter.getParticlesFollowEmitter()) {
-//      tempV3.set(last.position);
-//    } else {
-//      tempV3.set(last.position).subtractLocal(emitter.getWorldTranslation().subtract(p.initialPosition).divide(8f));
-//      //tempV3 = particles.getNode().getWorldRotation().inverse().multLocal(tempV3);
-//    }
 
-    up.set(last.velocity).crossLocal(test).normalizeLocal();
-    left.set(last.velocity).crossLocal(up).normalizeLocal();
-    up.multLocal(last.size);
+    // The quads are all rotated to face the camera
+    tempV3.set(last.position);
+    left.set(last.velocity).crossLocal(dir).normalizeLocal();
     left.multLocal(last.size);
     positions.put(tempV3.x + left.x)// + up.x)
         .put(tempV3.y + left.y )//+ up.y)
@@ -290,16 +265,8 @@ public class ParticleDataTrails extends ParticleDataMesh {
         .put(tempV3.z - left.z);// + up.z);
 
 
-      tempV3.set(current.position);
-//    if (emitter.getParticlesFollowEmitter()) {
-//    } else {
-//      tempV3.set(current.position).subtractLocal(emitter.getWorldTranslation().subtract(p.initialPosition).divide(8f));
-//      //tempV3 = particles.getNode().getWorldRotation().inverse().multLocal(tempV3);
-//    }
-
-    up.set(current.velocity).crossLocal(test).normalizeLocal();
-    left.set(current.velocity).crossLocal(up).normalizeLocal();
-    up.multLocal(current.size);
+    tempV3.set(current.position);
+    left.set(current.velocity).crossLocal(dir).normalizeLocal();
     left.multLocal(current.size);
     positions.put(tempV3.x + left.x)// - up.x)
         .put(tempV3.y + left.y)// - up.y)

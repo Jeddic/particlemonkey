@@ -60,6 +60,7 @@ public class TrailInfluencer extends ParticleInfluencer {
 
   // Used as a temp object for internal calculations
   private Vector3f tempOne = new Vector3f();
+  private Vector3f tempTwo = new Vector3f();
 
   // trail related display info
   private Geometry trailGeo;
@@ -78,6 +79,7 @@ public class TrailInfluencer extends ParticleInfluencer {
 
   private boolean useParticleSize = false;
   private boolean useParticleColor = false;
+  private boolean followParticleEmitter = true;
 
   private ValueType trailSize = new ValueType(0.1f);
   private ColorValueType colorOverLifetime = new ColorValueType(new ColorRGBA(1.0f, 0.0f, 0.0f, 1.0f));
@@ -100,6 +102,16 @@ public class TrailInfluencer extends ParticleInfluencer {
 
   public void setUseParticleColor(boolean useParticleColor) {
     this.useParticleColor = useParticleColor;
+  }
+
+  public boolean isFollowParticleEmitter() { return followParticleEmitter; }
+
+  public void setFollowParticleEmitter(boolean followParticleEmitter) {
+      this.followParticleEmitter = followParticleEmitter;
+
+      if (trailGeo != null) {
+          trailGeo.setIgnoreTransform(!followParticleEmitter);
+      }
   }
 
   public ValueType getTrailSize() {
@@ -169,6 +181,9 @@ public class TrailInfluencer extends ParticleInfluencer {
       // are we close enough to add a new segment
       ParticleTrailPoint last = p.trailSegments.getLast();
       tempOne.set(p.position);
+      if (!followParticleEmitter) {
+          tempOne.addLocal(emitter.getWorldTranslation());
+      }
       tempOne.subtractLocal(last.position);
       float dist = tempOne.length();
       if (dist >= minLength) {
@@ -178,9 +193,20 @@ public class TrailInfluencer extends ParticleInfluencer {
 
     // add particle trail point
     if (add) {
+      tempOne.set(p.position);
+      tempTwo.set(p.velocity);
+      if (!followParticleEmitter) {
+          tempOne.addLocal(emitter.getWorldTranslation());
+          //tempOne.addLocal(new Vector3f());
+          if (!p.trailSegments.isEmpty()) {
+            ParticleTrailPoint last = p.trailSegments.getLast();
+            tempTwo.set(tempOne).subtractLocal(last.position);
+            tempTwo.normalizeLocal();
+          }
+      }
       p.trailSegments.addLast(new ParticleTrailPoint(
-          p.position,
-          p.velocity,
+          tempOne,
+          tempTwo,
           useParticleSize ? p.size : trailSize.getValue(0.0f, p.randomValue),
           p.color,
           p.startlife * trailLife));
@@ -231,6 +257,7 @@ public class TrailInfluencer extends ParticleInfluencer {
       trailGeo = new Geometry();
       trailGeo.setMesh(trailMesh);
       trailGeo.setMaterial(trailmat);
+      trailGeo.setIgnoreTransform(!followParticleEmitter);
       emitter.attachChild(trailGeo);
     }
 
@@ -257,7 +284,7 @@ public class TrailInfluencer extends ParticleInfluencer {
     }
 
     if (trailGeo != null) {
-      trailGeo.setIgnoreTransform(!emitter.getParticlesFollowEmitter());
+      trailGeo.setIgnoreTransform(!emitter.getParticlesFollowEmitter() || !followParticleEmitter);
     }
   }
 
@@ -271,6 +298,7 @@ public class TrailInfluencer extends ParticleInfluencer {
     oc.write(trailLife, "traillife", 1.0f);
     oc.write(useParticleSize, "useparticlesize", false);
     oc.write(useParticleColor, "useparticlecolor", false);
+    oc.write(followParticleEmitter, "followparticleemitter", true);
     oc.write(trailSize, "trailsize", new ValueType(1.0f));
     oc.write(colorOverLifetime, "coloroverlifetime", new ColorValueType(new ColorRGBA()));
   }
@@ -285,6 +313,7 @@ public class TrailInfluencer extends ParticleInfluencer {
     trailLife = ic.readFloat("traillife", 1.0f);
     useParticleSize = ic.readBoolean("useparticlesize", false);
     useParticleColor = ic.readBoolean("useparticlecolor", false);
+    followParticleEmitter = ic.readBoolean("followparticleemitter", true);
     trailSize = (ValueType)ic.readSavable("trailsize", new ValueType(1.0f));
     colorOverLifetime = (ColorValueType)ic.readSavable("coloroverlifetime", new ColorValueType(new ColorRGBA()));
 
